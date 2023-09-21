@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.btn-dark {
+  @apply transition duration-300 ease-linear bg-slate-700 rounded-full hover:bg-slate-800;
+}
+
+.btn-border-dark {
+  @apply transition duration-300 ease-linear border-2 border-slate-800 rounded-full hover:bg-slate-800;
+}
+
+.btn-blue {
+  @apply transition duration-300 ease-in-out bg-teal-600 text-white rounded-full text-sm hover:bg-teal-700;
+}
+
+.head_text {
+  @apply mt-5 text-5xl font-extrabold leading-[1.15] text-slate-300 sm:text-6xl;
+}
+
+.blue_gradient {
+  @apply bg-gradient-to-r from-teal-500 via-blue-600 to-cyan-500 bg-clip-text text-transparent;
+}
+
+/* QUILL MODIFICATION */
+.ql-editor {
+  max-height: 85vh;
+  overflow: auto;
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  font-size: 18px;
+  @apply text-slate-800;
+}
+
+.ql-container {
+  font-size: 18px !important;
+}
+
+/* .ql-container {
+  font-size: 17px !important;
+  border: none;
+  @apply text-slate-300;
+}
+
+.ql-container.ql-bubble {
+  border: none;
+  max-height: 75vh;
+  overflow: scroll;
+  
+}
+.ql-toolbar.ql-bubble { 
+  border: none !important;
+  @apply text-slate-600
+} */
+
+/* .ql-toolbar .ql-stroke {
+  fill: none !important;
+  @apply stroke-slate-600 !important;
+}
+
+.ql-toolbar .ql-fill {
+  fill: #fff !important;
+  stroke: none !important;
+  @apply fill-slate-600 !important
+}
+
+.ql-toolbar .ql-picker {
+  @apply text-slate-600 !important
+} */

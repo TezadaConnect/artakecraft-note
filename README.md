@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Artakecraft Note
 
-## Getting Started
+I've created a brand-new program called Artakecraft Note to handle all of my writing requirements (I write books!). I take advantage of ChatGPT's grammar checker and paraphrase function to handle a novelist's research needs. I will run a beta test in November, contemplating the writer's month. This will also be made available the following year with a subscription-based payment system.
 
-First, run the development server:
+## Software Needed
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Nodejs 18.17.1LTS](https://nodejs.org/en)
+- [MongoDB cluster](https://cloud.mongodb.com/)
+- [VScode](https://code.visualstudio.com/download)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Nice to have Extensions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- ES7+ React/Redux/React-Native snippets
+- JavaScript and TypeScript Nightly
+- Material Icon Theme
+- Prettier - Code formatter
+- Pretty TypeScript Errors
+- Tailwind CSS intelliSense
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Development Environment
 
-## Learn More
+### Downloading the project
 
-To learn more about Next.js, take a look at the following resources:
+- Fork the project (Artakecraft Note)
+- Clone your fork `git clone "https-clone-link"`
+- Navigate to fork's directory
+- Install all the needed modules `npm install`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Running the project
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Make an account in MongoDB
+- Create a free tier cluster
+- Open the clone fork with vscode
+- Create a new file and name it `.env`
+- Add your MongoDB creadentials `NEXT_PUBLIC_MONGODB="mongodb-credentials"`
 
-## Deploy on Vercel
+### Sending a Pull Request
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- After making changes run the command `npm run lint`,
+- After fixing lint errors run the command `npm run format`
+- Add all the changes `git add .`
+- Stage your commit `git add commit -m "Your Message"`
+- Upload your changes `git puch origin branch`
+- Make a PR request directly to the original copy of project
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Contributor
+
+- Terrence Calzada (TezadaConnect)
