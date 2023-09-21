@@ -83,7 +83,7 @@ const ProjectModal = ({ onSuccessCallback }: ProjectModalProps) => {
   };
 
   return (
-    <ModalCommon params="isProject">
+    <ModalCommon params="isProject" isBusy={isBusy}>
       {isBusy ? (
         <div className="h-40 flex justify-center items-center flex-col gap-5">
           <p className="text-lg">Loading please wait...</p>

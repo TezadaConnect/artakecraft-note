@@ -1,7 +1,7 @@
 'use client';
 import { BsPencilFill } from 'react-icons/bs';
 import { AiFillSetting } from 'react-icons/ai';
-import { Fragment, memo, useEffect, useState } from 'react';
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import 'react-quill/dist/quill.bubble.css';
 import RightToolBar from '@src/components/right-components/RightToolBar';
 import dynamic from 'next/dynamic';
@@ -13,6 +13,8 @@ import NoteCard from '@src/components/left-components/NoteCard';
 import FolderNoteModal from '@src/components/modals/FolderNoteModal';
 import { ProjectType } from '@src/types/project_type';
 import { useParams } from 'next/navigation';
+import { FolderType } from '@src/types/folder_type';
+// import ReactQuill from 'react-quill';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -101,41 +103,34 @@ const RightPageComponent = () => {
 const LeftPageComponent = () => {
   const [currentProj, setCurrentProj] = useState<ProjectType>();
   const { id } = useParams();
-  useEffect(() => {
-    const fetchCurrentProject = async (item_id: string) => {
-      const url: string = '/api/project/' + item_id;
-      const res: Response = await fetch(url, { method: 'GET' });
-      const data: ProjectType = await res.json();
-      if (res.ok) {
-        setCurrentProj({ ...data });
-        return;
-      }
-      console.log('Error: ' + res.status);
-    };
-    fetchCurrentProject(id as string);
+  const isRendered = useRef(true);
+
+  const fetchCurrentProject = useCallback(async () => {
+    const item_id = id as string;
+    const url: string = '/api/project/' + item_id;
+    const res: Response = await fetch(url, { method: 'GET' });
+    const data: ProjectType = await res.json();
+    if (res.ok) {
+      setCurrentProj({ ...data });
+      return;
+    }
+    console.log('Error: ' + res.status);
   }, [id]);
+
+  useEffect(() => {
+    if (isRendered.current) {
+      fetchCurrentProject();
+    }
+  }, [fetchCurrentProject]);
+
+  const curruntData = useMemo(() => currentProj, [currentProj]);
 
   return (
     <Fragment>
-      <FolderNoteModal />
-      <div className="hidden col-span-2 border-r-2 md:block overflow-y-auto border-slate-900">
-        <LeftToolBar currentProj={currentProj as ProjectType} />
-        <div className="px-3">
-          <FolderCard title="Chapters">
-            <NoteCard title="Chapter 1" id="1" />
-            <NoteCard title="Chapter 2" />
-            <NoteCard title="Chapter 3" />
-          </FolderCard>
-          <FolderCard title="Research">
-            <NoteCard title="Tikbalang 1" />
-            <NoteCard title="Sarangay" />
-          </FolderCard>
-          <FolderCard title="Brain Vomit">
-            <NoteCard title="Geo Locations" />
-            <NoteCard title="Qoutes" />
-            <NoteCard title="hilarious Joke" />
-          </FolderCard>
-        </div>
+      <FolderNoteModal onCreateCallback={() => fetchCurrentProject()} />
+      <div className="hidden col-span-2 border-r-2 md:block overflow-y-auto border-slate-900 h-screen">
+        <LeftToolBar currentProj={curruntData as ProjectType} />
+        <div className="px-3">{currentProj?.folders?.map((item: any) => <FolderCard key={item._id} item={item} />)}</div>
       </div>
     </Fragment>
   );

@@ -1,6 +1,6 @@
 'use client';
 import ProjectCard from '@/src/components/ProjectCard';
-import { Fragment, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ProjectType } from '@src/types/project_type';
 import { useSession } from 'next-auth/react';
 import { useReactTable, getCoreRowModel, flexRender, getPaginationRowModel, getFilteredRowModel, VisibilityState } from '@tanstack/react-table';
@@ -15,24 +15,27 @@ const DashboardPage = () => {
 
   const dataRecent: ProjectType[] = useMemo(() => project?.recent, [project?.recent]);
 
-  const getRecentAndAllProjects = useCallback(async (item_id: string) => {
-    const url: string = '/api/project/author/' + item_id;
-    const response: Response = await fetch(url, { method: 'GET' });
-    const data: any = await response.json();
-    if (response.ok) {
-      setProjects({ ...data });
-      return;
+  const getRecentAndAllProjects = useCallback(async () => {
+    if (session?.user?.id) {
+      const item_id = session?.user?.id as string;
+      const url: string = '/api/project/author/' + item_id;
+      const response: Response = await fetch(url, { method: 'GET' });
+      const data: any = await response.json();
+      if (response.ok) {
+        setProjects({ ...data });
+        return;
+      }
+      console.log('Error: ' + response.status);
     }
-    console.log('Error: ' + response.status);
-  }, []);
+  }, [session?.user?.id]);
 
   useEffect(() => {
-    if (session?.user?.id) getRecentAndAllProjects(session.user.id);
-  }, [getRecentAndAllProjects, session?.user?.id]);
+    getRecentAndAllProjects();
+  }, [getRecentAndAllProjects]);
 
   return (
     <Fragment>
-      <ProjectModal onSuccessCallback={() => getRecentAndAllProjects(session?.user?.id as string)} />
+      <ProjectModal onSuccessCallback={() => getRecentAndAllProjects()} />
       <Navbar />
       <section className="relative flex flex-col items-center z-0 h-full">
         <div className="relative w-10/12 mt-10 mb-5">

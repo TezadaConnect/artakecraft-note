@@ -1,4 +1,5 @@
 import { connectToDB } from '@src/configs/database_config';
+import Folder from '@src/models/folder';
 import Project from '@src/models/project';
 import { ProjectType } from '@src/types/project_type';
 import { NextRequest, NextResponse } from 'next/server';
@@ -11,16 +12,17 @@ import { NextRequest, NextResponse } from 'next/server';
 export const GET = async (req: NextRequest, { params }: any) => {
   try {
     await connectToDB();
-    const project: ProjectType = (await Project.findById(params.id)) as ProjectType;
+    const project = await Project.findOne({ _id: params.id }).populate('folders');
     if (!project) return NextResponse.json({ message: 'Not found' }, { status: 404 });
     return NextResponse.json({
       title: project.title,
       image: project.image,
       synopsis: project.synopsis,
-      genre: project.genre
+      genre: project.genre,
+      folders: project.folders
     });
   } catch (error) {
-    return NextResponse.json({ error });
+    return NextResponse.json({ error }, { status: 500 });
   }
 };
 

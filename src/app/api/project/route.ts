@@ -39,7 +39,7 @@ export const POST = async (req: NextRequest) => {
 
     // Connect to db and save the data
     await connectToDB();
-    const newProject = new Project({
+    const newProject = await new Project({
       author: dataUploaded.author,
       title: dataUploaded.title,
       genre: dataUploaded.genre,
@@ -49,7 +49,7 @@ export const POST = async (req: NextRequest) => {
         url: dataUploaded.image.url
       }
     });
-    newProject.save();
+    await newProject.save();
 
     return NextResponse.json({ ...dataUploaded });
   } catch (error) {

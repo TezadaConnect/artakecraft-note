@@ -18,7 +18,7 @@ const LeftToolBar = ({ currentProj }: LeftToolBarProp) => {
   const openAddNewFolderNote = () => router.push(pathname + '?addFolderNote=true');
 
   return (
-    <div className="mx-3 my-3">
+    <div className="px-3 py-3 sticky top-0 bg-slate-950 z-50">
       <div className="">
         {isShow && (
           <div className="relative w-full flex h-40 mb-2">
@@ -46,4 +46,4 @@ const LeftToolBar = ({ currentProj }: LeftToolBarProp) => {
   );
 };
 
-export default LeftToolBar;
+export default memo(LeftToolBar);

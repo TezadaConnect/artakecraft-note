@@ -2,18 +2,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { signIn, getProviders, signOut, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Navbar = () => {
   const { data: session } = useSession();
   const [providers, setProviders] = useState<any>(null);
+  const isRendered = useRef(true);
 
   useEffect(() => {
-    const handlgeGetProviders = async () => {
-      const res = await getProviders();
-      setProviders(res);
-    };
-    handlgeGetProviders();
+    if (isRendered.current) {
+      isRendered.current = false;
+      const handlgeGetProviders = async () => {
+        const res = await getProviders();
+        setProviders(res);
+      };
+      handlgeGetProviders();
+    }
   }, []);
 
   return (

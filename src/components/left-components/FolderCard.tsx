@@ -1,13 +1,14 @@
 'use client';
 import { ReactNode, useState } from 'react';
 import { AiFillFolder } from 'react-icons/ai';
+import NoteCard from './NoteCard';
+import { FolderType } from '@src/types/folder_type';
 
 type FolderCardProp = {
-  title: string;
-  children: ReactNode;
+  item: FolderType;
 };
 
-const FolderCard = ({ title = 'Chapters', children }: FolderCardProp) => {
+const FolderCard = ({ item }: FolderCardProp) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <div onClick={() => setIsOpen(!isOpen)}>
@@ -15,11 +16,13 @@ const FolderCard = ({ title = 'Chapters', children }: FolderCardProp) => {
         <span className="group-hover:scale-125 group-hover:text-teal-600 duration-200">
           <AiFillFolder size={18} />
         </span>
-        <span className="font-bold text-base">{title}</span>
+        <span className="font-bold text-base">{item?.name}</span>
       </div>
       {isOpen && (
         <div className="mb-2 flex flex-col border-t border-slate-900" onClick={(e: any) => e.stopPropagation()}>
-          {children}
+          <NoteCard title="Chapter 1" id="1" />
+          <NoteCard title="Chapter 2" />
+          <NoteCard title="Chapter 3" />
         </div>
       )}
     </div>
