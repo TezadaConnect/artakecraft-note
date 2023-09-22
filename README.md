@@ -37,7 +37,8 @@ I've created a brand-new program called Artakecraft Note to handle all of my wri
 ### Sending a Pull Request
 
 - After making changes run the command `npm run lint`,
-- After fixing lint errors run the command `npm run format`
+- Fix all the warnings/errors the lint throw
+- After fixing lint warnings/errors run the command `npm run format`
 - Add all the changes `git add .`
 - Stage your commit `git add commit -m "Your Message"`
 - Upload your changes `git puch origin branch`

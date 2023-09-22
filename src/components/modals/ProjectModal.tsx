@@ -13,6 +13,7 @@ import makeAnimated from 'react-select/animated';
 import { GENRE_OPTIONS } from '@src/utils/static_data_utils';
 import { SelectValueType, colourStyles } from '@src/utils/select_styles_utils';
 import { ImSpinner9 } from 'react-icons/im';
+import { useCreateProjectMutation } from '@src/redux/api_features/api_project_slice';
 
 const animatedComponents = makeAnimated();
 
@@ -25,15 +26,17 @@ const validSchema = Yup.object({
 });
 
 type ProjectModalProps = {
-  onSuccessCallback?: () => void;
+  // onSuccessCallback?: () => void;
 };
 
-const ProjectModal = ({ onSuccessCallback }: ProjectModalProps) => {
+const ProjectModal = ({}: ProjectModalProps) => {
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const label = useSearchParams().get('label');
   const imageRef = useRef<any>(null);
   const router = useRouter();
   const { data: session } = useSession();
+
+  const [create] = useCreateProjectMutation();
 
   const form = useFormik({
     enableReinitialize: true,
@@ -53,18 +56,13 @@ const ProjectModal = ({ onSuccessCallback }: ProjectModalProps) => {
       dataForm.append('title', values.title as string);
       dataForm.append('genre', values.genre as string);
       dataForm.append('synopsis', values.synopsis as string);
-      const response: Response = await fetch('/api/project', {
-        method: 'POST',
-        body: dataForm
-      });
-      if (response.ok) {
-        if (onSuccessCallback) onSuccessCallback();
-        setIsBusy(false);
+      try {
+        await create(dataForm).unwrap();
         router.back();
-        return;
+      } catch (error) {
+        console.log(error);
       }
       setIsBusy(false);
-      console.log('Error: ' + response.status);
     }
   });
 

@@ -1,5 +1,5 @@
 'use client';
-import { Fragment, memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { Fragment, memo, useEffect, useMemo } from 'react';
 import FolderNoteModal from '../modals/FolderNoteModal';
 import LeftToolBar from './LeftToolBar';
 import FolderCard from './FolderCard';
@@ -7,17 +7,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@src/redux/store';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'next/navigation';
-import { ProjectType } from '@src/types/project_type';
 import { updateProjectInfo } from '@src/redux/state_features/editor_left_slice';
 import { DragDropContext, Draggable, DraggableProvided, DropResult, DroppableProvided } from 'react-beautiful-dnd';
 import { StrictModeDroppable as Droppable } from '../common/StricModeDroppable';
 import { FolderType } from '@src/types/folder_type';
-import { useFetchProjectFoldersNotesQuery } from '@src/redux/api_features/api_project_slice';
+import { useReadProjectFoldersNotesQuery } from '@src/redux/api_features/api_project_slice';
 
 const LeftSidebarComponent = () => {
   const { id } = useParams();
   const { projectInfo } = useSelector((state: RootState) => state.editorLeft);
-  const { data: project } = useFetchProjectFoldersNotesQuery(id as string);
+  const { data: project } = useReadProjectFoldersNotesQuery(id as string);
   const currentFolder: FolderType[] = useMemo(() => projectInfo?.folders as FolderType[], [projectInfo?.folders]);
   const dispath = useDispatch();
 
