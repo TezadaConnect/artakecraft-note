@@ -20,5 +20,3 @@ export const editorLeftSlice = createSlice({
 });
 
 export const { updateProjectInfo } = editorLeftSlice.actions;
-
-export default editorLeftSlice.reducer;

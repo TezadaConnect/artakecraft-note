@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import ModalCommon from '../common/ModalCommon';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { IoClose } from 'react-icons/io5';
@@ -11,19 +11,20 @@ import * as Yup from 'yup';
 import { isRequiredValidation } from '@src/utils/validation_utils';
 import { ImSpinner9 } from 'react-icons/im';
 import ErrorFieldCommon from '../common/ErrorFieldCommon';
+import { useCreateFolderMutation } from '@src/redux/api_features/api_project_slice';
 
 type FolderNoteModalProp = {
-  onCreateCallback: () => void;
+  // onCreateCallback: () => void;
 };
 
-const FolderNoteModal = ({ onCreateCallback }: FolderNoteModalProp) => {
+const FolderNoteModal = ({}: FolderNoteModalProp) => {
   const [display, setDisplay] = useState<DisplayDirNoteEnum>(DisplayDirNoteEnum.main);
   const label = useSearchParams().get('label');
   const router: AppRouterInstance = useRouter();
-  const [isBusy, setBusy] = useState<boolean>(false);
+  const [isBusy, setIsBusy] = useState<boolean>(false);
 
   const displaySetterMethod = useCallback((val: DisplayDirNoteEnum) => setDisplay(val), []);
-  const displayLoadScreen = useCallback((val: boolean) => setBusy(val), []);
+  const displayLoadScreen = useCallback((val: boolean) => setIsBusy(val), []);
 
   return (
     <ModalCommon params="addFolderNote" isBusy={isBusy}>
@@ -47,12 +48,8 @@ const FolderNoteModal = ({ onCreateCallback }: FolderNoteModalProp) => {
           </div>
           <hr className="border border-slate-700" />
           {display === DisplayDirNoteEnum.main && <MainDisplay displayCallback={displaySetterMethod} />}
-          {display === DisplayDirNoteEnum.note && (
-            <CreateNoteDisplay displayCallback={displaySetterMethod} loadCallback={displayLoadScreen} onCreateCallback={onCreateCallback} />
-          )}
-          {display === DisplayDirNoteEnum.dir && (
-            <CreateFolderDisplay displayCallback={displaySetterMethod} loadCallback={displayLoadScreen} onCreateCallback={onCreateCallback} />
-          )}
+          {display === DisplayDirNoteEnum.note && <CreateNoteDisplay displayCallback={displaySetterMethod} loadCallback={displayLoadScreen} />}
+          {display === DisplayDirNoteEnum.dir && <CreateFolderDisplay displayCallback={displaySetterMethod} loadCallback={displayLoadScreen} />}
         </div>
       )}
     </ModalCommon>
@@ -64,7 +61,6 @@ export default memo(FolderNoteModal);
 type DisplaysProps = {
   displayCallback: (val: DisplayDirNoteEnum) => void;
   loadCallback?: (val: boolean) => void;
-  onCreateCallback?: () => void;
 };
 
 const MainDisplay = ({ displayCallback }: DisplaysProps) => {
@@ -92,7 +88,7 @@ const MainDisplay = ({ displayCallback }: DisplaysProps) => {
   );
 };
 
-const CreateNoteDisplay = ({ displayCallback, loadCallback, onCreateCallback }: DisplaysProps) => {
+const CreateNoteDisplay = ({ displayCallback, loadCallback }: DisplaysProps) => {
   const form = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -154,9 +150,11 @@ const CreateNoteDisplay = ({ displayCallback, loadCallback, onCreateCallback }: 
   );
 };
 
-const CreateFolderDisplay = ({ displayCallback, loadCallback, onCreateCallback }: DisplaysProps) => {
+const CreateFolderDisplay = ({ displayCallback, loadCallback }: DisplaysProps) => {
   const { id } = useParams();
+  const [create] = useCreateFolderMutation();
   const router = useRouter();
+  const loadingSetter = (val: boolean) => loadCallback && loadCallback(val);
 
   const form = useFormik({
     enableReinitialize: true,
@@ -168,30 +166,18 @@ const CreateFolderDisplay = ({ displayCallback, loadCallback, onCreateCallback }
       name: isRequiredValidation,
       projectId: isRequiredValidation
     }),
-    onSubmit: async (values, { resetForm }) => {
-      loadModal(true);
-
-      const response: Response = await fetch('/api/project/folder', {
-        method: 'POST',
-        body: JSON.stringify({
-          ...values
-        })
-      });
-
-      if (response.ok) {
-        onCreateCallback && onCreateCallback();
+    onSubmit: async (values) => {
+      loadingSetter(true);
+      try {
+        await create({ ...values }).unwrap();
         displayCallback(DisplayDirNoteEnum.main);
-        loadModal(false);
         router.back();
-        return;
+      } catch (error) {
+        console.log(error);
       }
-
-      console.log('Error: ' + response.status);
-      loadModal(false);
+      loadingSetter(false);
     }
   });
-
-  const loadModal = (val: boolean) => loadCallback && loadCallback(val);
 
   return (
     <div className="w-full">
@@ -204,7 +190,7 @@ const CreateFolderDisplay = ({ displayCallback, loadCallback, onCreateCallback }
             value={form.values.name}
             onChange={form.handleChange}
           />
-          <ErrorFieldCommon error={form.errors.projectId} />
+          <ErrorFieldCommon error={form.errors.name} />
         </div>
         <div className="mb-1 w-full flex justify-end mt-6">
           <button type="submit" className="btn-blue py-3 px-5">
@@ -215,6 +201,3 @@ const CreateFolderDisplay = ({ displayCallback, loadCallback, onCreateCallback }
     </div>
   );
 };
-
-// onChange={form.handleChange}
-// <ErrorFieldCommon error={form.errors.synopsis} />

@@ -51,8 +51,8 @@ export const POST = async (req: NextRequest) => {
     });
     await newProject.save();
 
-    return NextResponse.json({ ...dataUploaded });
+    return NextResponse.json({ ...dataUploaded }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error });
+    return NextResponse.json({ error }, { status: 500 });
   }
 };
