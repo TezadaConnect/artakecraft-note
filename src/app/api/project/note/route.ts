@@ -18,8 +18,11 @@ export const POST = async (req: NextRequest) => {
       text: ''
     });
     await newNote.save();
-    await folder.notes.push(newNote._id);
-    await folder.save();
+    if (folder) {
+      folder.notes.push(newNote._id);
+      await folder.save();
+    }
+
     return NextResponse.json({ ...newNote });
   } catch (error) {
     return NextResponse.json({ error });

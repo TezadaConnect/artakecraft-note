@@ -13,6 +13,6 @@ const NoteSchema = new Schema(
   }
 );
 
-const Note = models.Note || model('Note', NoteSchema);
-
+const Note = model('Note', NoteSchema);
+// models.Note ||
 export default Note;

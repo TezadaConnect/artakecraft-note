@@ -12,8 +12,14 @@ import { NextRequest, NextResponse } from 'next/server';
 export const GET = async (req: NextRequest, { params }: any) => {
   try {
     await connectToDB();
-    const project = await Project.findOne({ _id: params.id }).populate('folders');
+
+    const folderChecker = await Folder.exists({});
+    if (!folderChecker) await Folder.create();
+
+    const project = await Project.findById(params.id).populate('folders').exec();
+
     if (!project) return NextResponse.json({ message: 'Not found' }, { status: 404 });
+
     return NextResponse.json({
       title: project.title,
       image: project.image,
@@ -22,7 +28,7 @@ export const GET = async (req: NextRequest, { params }: any) => {
       folders: project.folders
     });
   } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+    return NextResponse.json({ error: 'Error try again later' }, { status: 500 });
   }
 };
 

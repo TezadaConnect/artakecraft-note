@@ -27,7 +27,12 @@ const ProjectSchema = new Schema(
         type: String
       }
     },
-    folders: [{ type: Schema.Types.ObjectId, ref: 'Folder' }]
+    folders: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Folder'
+      }
+    ]
   },
   {
     timestamps: true
