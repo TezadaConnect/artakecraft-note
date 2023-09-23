@@ -28,13 +28,15 @@ const LeftToolBar = () => {
     <div className="px-3 py-3 sticky top-0 bg-slate-950 z-50">
       <div className="" ref={animateRef}>
         {isShow && (
-          <div className="relative w-full flex h-40 mb-2">
+          <div className="relative flex mb-2 w-[120px] h-[160px]">
             <Image
+              loading="lazy"
               src={projectDetail?.image?.url as string}
-              width={120}
-              height={100}
+              quality={20}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              fill
               alt="book-cover"
-              className="object-cover rounded bg-slate-800"
+              className="object-cover rounded bg-slate-800 w-auto h-auto"
             />
           </div>
         )}

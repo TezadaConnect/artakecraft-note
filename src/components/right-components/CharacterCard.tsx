@@ -15,7 +15,16 @@ const CharacterCard = ({ name, mbti, description, img }: CharacterCardProps) => 
   return (
     <div className="border border-gray-900 p-2 rounded cursor-pointer select-none hover:scale-105 duration-200 hover:bg-slate-900">
       <div className="flex flex-row gap-3 items-center">
-        <Image className="rounded-full" src={img} width={50} height={50} alt="avatar" />
+        <Image
+          loading="lazy"
+          quality={20}
+          className="rounded-full"
+          src={img}
+          width={50}
+          height={50}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          alt="avatar"
+        />
         <div>
           <p className="font-semibold text-gray-4 00">{name}</p>
           <p className="text-slate-500 text-xs flex gap-2">

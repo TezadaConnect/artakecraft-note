@@ -17,7 +17,15 @@ const ProjectCard = ({ id, title, synopsis, img_url }: ProjectCardPropType) => {
       className="relative group h-64 bg-slate-500 text-white w-full rounded-md overflow-hidden cursor-pointer"
       onDoubleClick={() => router.push(url)}
     >
-      <Image src={img_url} alt="recent-work" sizes="max-width: 100%" fill className="object-cover" />
+      <Image
+        loading="lazy"
+        quality={20}
+        src={img_url}
+        alt="recent-work"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        fill
+        className="object-cover"
+      />
 
       <div className="h-64 flex flex-col justify-end bg-gradient-to-t from-black/80 to-bg-black transition-all duration-200 translate-y-72 group-hover:translate-y-0">
         <p className="text-lg font-semibold mx-3">{title}</p>
