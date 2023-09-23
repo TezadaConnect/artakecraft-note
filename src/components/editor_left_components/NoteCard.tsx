@@ -1,14 +1,19 @@
+import Link from 'next/link';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { MdNote } from 'react-icons/md';
 
 type NoteCardProps = {
-  title?: string;
+  title: string;
   id?: string;
 };
 
 const NoteCard = ({ title = 'Towns of Beginnings', id }: NoteCardProps) => {
-  const stateSelection: boolean = id === undefined ? false : true;
+  const noteId = useSearchParams().get('noteId');
+  const stateSelection: boolean = id === noteId ? true : false;
+  const pathname = usePathname();
   return (
-    <div
+    <Link
+      href={pathname + '?noteId=' + id}
       className={`w-full p-2 border-b border-slate-900 rounded cursor-pointer select-none group ${
         stateSelection ? 'bg-slate-900' : 'hover:bg-slate-900'
       }`}
@@ -19,7 +24,7 @@ const NoteCard = ({ title = 'Towns of Beginnings', id }: NoteCardProps) => {
         </span>
         <span className="text-slate-600 text-sm truncate">{title}</span>
       </div>
-    </div>
+    </Link>
   );
 };
 

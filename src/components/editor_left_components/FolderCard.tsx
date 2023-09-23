@@ -1,16 +1,19 @@
 'use client';
-import { ReactNode, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AiFillFolder } from 'react-icons/ai';
 import NoteCard from './NoteCard';
 import { FolderType } from '@src/types/folder_type';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { NoteType } from '@src/types/note_type';
+import { useParams } from 'next/navigation';
 
 type FolderCardProp = {
   item: FolderType;
 };
 
 const FolderCard = ({ item }: FolderCardProp) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const notes: NoteType[] = useMemo(() => item?.notes as NoteType[], [item?.notes]);
   const [animateRef] = useAutoAnimate();
   return (
     <div onClick={() => setIsOpen(!isOpen)} className="bg-slate-950" ref={animateRef}>
@@ -21,10 +24,8 @@ const FolderCard = ({ item }: FolderCardProp) => {
         <span className="font-bold text-base truncate">{item?.name}</span>
       </div>
       {isOpen && (
-        <div className="mb-2 flex flex-col border-t border-slate-900" onClick={(e: any) => e.stopPropagation()}>
-          <NoteCard title="Chapter 1" id="1" />
-          <NoteCard title="Chapter 2" />
-          <NoteCard title="Chapter 3" />
+        <div className="mb-2 flex flex-col border-t border-slate-900" onClick={(e) => e.stopPropagation()}>
+          {notes?.map((item) => <NoteCard key={item._id} title={item.title} id={item._id} />)}
         </div>
       )}
     </div>

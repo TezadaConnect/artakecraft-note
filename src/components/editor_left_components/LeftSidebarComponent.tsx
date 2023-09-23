@@ -7,16 +7,24 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@src/redux/store';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'next/navigation';
-import { updateProjectInfo } from '@src/redux/state_features/editor_left_slice';
+import { updateProjectInfo } from '@src/redux/state_features/editor_slice';
 import { DragDropContext, Draggable, DraggableProvided, DropResult, DroppableProvided } from 'react-beautiful-dnd';
 import { StrictModeDroppable as Droppable } from '../common/StricModeDroppable';
 import { FolderType } from '@src/types/folder_type';
 import { useReadProjectFoldersNotesQuery } from '@src/redux/api_features/api_project_slice';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
+
+/**
+ * THIS IS TEMPORARY NULLIFYING OF DEFAULTPROPS ERROR IN REACT-BEAUTIFUL-DND
+ */
+const error = console.error;
+console.error = (...args: any) => {
+  if (/defaultProps/.test(args[0])) return;
+  error(...args);
+};
 
 const LeftSidebarComponent = () => {
   const { id } = useParams();
-  const { projectInfo } = useSelector((state: RootState) => state.editorLeft);
+  const { projectInfo } = useSelector((state: RootState) => state.editor);
   const { data: project } = useReadProjectFoldersNotesQuery(id as string);
   const currentFolder: FolderType[] = useMemo(() => projectInfo?.folders as FolderType[], [projectInfo?.folders]);
   const dispath = useDispatch();
@@ -36,8 +44,6 @@ const LeftSidebarComponent = () => {
     // Updating  the state with the new order
     dispath(updateProjectInfo({ ...projectInfo, folders: folderHolder ?? [] }));
   };
-
-  const [animateRef] = useAutoAnimate();
 
   return (
     <Fragment>

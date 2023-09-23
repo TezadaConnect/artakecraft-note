@@ -5,3 +5,8 @@ export type AllAndRecentProjectsType = {
   all: ProjectType[];
   recent: ProjectType[];
 };
+
+export type OptionSelect = {
+  label: string;
+  value: string;
+};

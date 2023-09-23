@@ -26,6 +26,14 @@ export const apiProjectSlice = createApi({
       }),
       invalidatesTags: ['project']
     }),
+    createNotes: builder.mutation<void, any>({
+      query: (inputs) => ({
+        url: 'project/note',
+        method: 'POST',
+        body: inputs
+      }),
+      invalidatesTags: ['project']
+    }),
     /**
      * =================================================
      * Recent and All
@@ -46,4 +54,10 @@ export const apiProjectSlice = createApi({
   })
 });
 
-export const { useReadProjectFoldersNotesQuery, useCreateFolderMutation, useReadAllAndRecentQuery, useCreateProjectMutation } = apiProjectSlice;
+export const {
+  useReadProjectFoldersNotesQuery,
+  useCreateFolderMutation,
+  useReadAllAndRecentQuery,
+  useCreateProjectMutation,
+  useCreateNotesMutation
+} = apiProjectSlice;

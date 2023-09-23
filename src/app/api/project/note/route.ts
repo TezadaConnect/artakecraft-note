@@ -12,19 +12,14 @@ export const POST = async (req: NextRequest) => {
   const { title, folderId } = await req.json();
   try {
     await connectToDB();
-    const folder = await Folder.findById(folderId);
-    const newNote = await new Note({
-      title: title,
-      text: ''
-    });
+    const folder = await Folder.findByIdAndUpdate(folderId);
+    const newNote = await new Note({ title: title, text: '' });
+    console.table(newNote);
     await newNote.save();
-    if (folder) {
-      folder.notes.push(newNote._id);
-      await folder.save();
-    }
-
-    return NextResponse.json({ ...newNote });
+    await folder.notes.push(newNote._id);
+    await folder.save();
+    return NextResponse.json({ status: 'Success' });
   } catch (error) {
-    return NextResponse.json({ error });
+    return NextResponse.json({ error }, { status: 500 });
   }
 };

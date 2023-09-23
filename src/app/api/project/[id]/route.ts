@@ -1,5 +1,6 @@
 import { connectToDB } from '@src/configs/database_config';
 import Folder from '@src/models/folder';
+import Note from '@src/models/note';
 import Project from '@src/models/project';
 import { ProjectType } from '@src/types/project_type';
 import { NextRequest, NextResponse } from 'next/server';
@@ -9,14 +10,21 @@ import { NextRequest, NextResponse } from 'next/server';
  *  DONE GET ONE PROJECT
  * ======================================
  */
+
+const RELATED_DATA = {
+  path: 'folders',
+  model: Folder,
+  populate: {
+    path: 'notes',
+    model: Note
+  }
+};
+
 export const GET = async (req: NextRequest, { params }: any) => {
   try {
     await connectToDB();
 
-    const folderChecker = await Folder.exists({});
-    if (!folderChecker) await Folder.create();
-
-    const project = await Project.findById(params.id).populate('folders').exec();
+    const project = await Project.findById(params.id).populate(RELATED_DATA).exec();
 
     if (!project) return NextResponse.json({ message: 'Not found' }, { status: 404 });
 

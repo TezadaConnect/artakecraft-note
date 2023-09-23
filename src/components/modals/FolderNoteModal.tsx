@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import ModalCommon from '../common/ModalCommon';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { IoClose } from 'react-icons/io5';
@@ -11,8 +11,11 @@ import * as Yup from 'yup';
 import { isRequiredValidation } from '@src/utils/validation_utils';
 import { ImSpinner9 } from 'react-icons/im';
 import ErrorFieldCommon from '../common/ErrorFieldCommon';
-import { useCreateFolderMutation } from '@src/redux/api_features/api_project_slice';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useCreateFolderMutation, useCreateNotesMutation } from '@src/redux/api_features/api_project_slice';
+import { useSelector } from 'react-redux';
+import { RootState } from '@src/redux/store';
+import { FolderType } from '@src/types/folder_type';
+import { OptionSelect } from '@src/types/others';
 
 type FolderNoteModalProp = {
   // onCreateCallback: () => void;
@@ -26,8 +29,6 @@ const FolderNoteModal = ({}: FolderNoteModalProp) => {
 
   const displaySetterMethod = useCallback((val: DisplayDirNoteEnum) => setDisplay(val), []);
   const displayLoadScreen = useCallback((val: boolean) => setIsBusy(val), []);
-
-  const [animateRef] = useAutoAnimate();
 
   return (
     <ModalCommon params="addFolderNote" isBusy={isBusy}>
@@ -92,29 +93,42 @@ const MainDisplay = ({ displayCallback }: DisplaysProps) => {
 };
 
 const CreateNoteDisplay = ({ displayCallback, loadCallback }: DisplaysProps) => {
+  const { projectInfo } = useSelector((state: RootState) => state.editor);
+  const router = useRouter();
+  const [create] = useCreateNotesMutation();
+
+  const options: OptionSelect[] = useMemo(() => {
+    const arrHolder: OptionSelect[] = [];
+    const folders: FolderType[] = projectInfo?.folders;
+    folders?.forEach((item) => {
+      arrHolder.push({
+        value: item._id,
+        label: item.name
+      });
+    });
+    return arrHolder;
+  }, [projectInfo?.folders]);
+
   const form = useFormik({
     enableReinitialize: true,
     initialValues: {
-      title: ''
+      title: '',
+      folderId: options[0].value
     },
     validationSchema: Yup.object({
+      folderId: isRequiredValidation,
       title: isRequiredValidation
     }),
     onSubmit: async (values) => {
       loadModal(true);
-      const response: Response = await fetch('/api/project/folder', {
-        method: 'POST',
-        body: JSON.stringify({
-          ...values
-        })
-      });
-      if (response.ok) {
+      try {
+        await create({ ...values }).unwrap();
+        router.back();
         displayCallback(DisplayDirNoteEnum.main);
-        loadModal(true);
-        return;
+      } catch (error) {
+        console.log(error);
       }
-      console.log('Error: ' + response.status);
-      loadModal(true);
+      loadModal(false);
     }
   });
 
@@ -126,22 +140,30 @@ const CreateNoteDisplay = ({ displayCallback, loadCallback }: DisplaysProps) => 
         <div className="mt-3">
           <label className="mb-1 text-lg text-slate-500">Folder Designation</label>
           <select
-            name=""
-            placeholder=""
+            name="folderId"
+            placeholder="Choose Folder"
+            value={form.values.folderId}
+            onChange={form.handleChange}
             className="w-full p-3 text-lg text-slate-300 border border-slate-800 rounded-lg bg-slate-900 focus:ring-slate-600 focus:border-slate-600"
           >
-            <option value="">Chapters</option>
-            <option value="">Research</option>
-            <option value="">Brain Vomit</option>
+            {options.map((item, key) => (
+              <option value={item.value} key={item.value} selected={key === 0}>
+                {item.label}
+              </option>
+            ))}
           </select>
+          <ErrorFieldCommon error={form.errors.folderId} />
         </div>
 
         <div className="mt-2">
           <label className="mb-1 text-lg text-slate-500">Note Title</label>
           <input
             className="w-full p-2 text-lg text-slate-300 border border-slate-800 rounded-lg bg-slate-900 focus:ring-slate-600 focus:border-slate-600"
-            name="synopsis"
+            name="title"
+            value={form.values.title}
+            onChange={form.handleChange}
           />
+          <ErrorFieldCommon error={form.errors.title} />
         </div>
         <div className="mb-1 w-full flex justify-end mt-6">
           <button type="submit" className="btn-blue py-3 px-5">

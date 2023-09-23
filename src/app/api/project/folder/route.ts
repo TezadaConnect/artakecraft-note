@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest) => {
 
   try {
     await connectToDB();
-    const project = await Project.findByIdAndUpdate({ _id: projectId });
+    const project = await Project.findByIdAndUpdate(projectId);
     const newFolder = await new Folder({
       name: name,
       notes: [],

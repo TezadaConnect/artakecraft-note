@@ -1,13 +1,13 @@
 'use client';
 import { Store, configureStore } from '@reduxjs/toolkit';
-import { editorLeftSlice } from './state_features/editor_left_slice';
+import { editorSlice } from './state_features/editor_slice';
 import { apiProjectSlice } from './api_features/api_project_slice';
 import { dashboardSlice } from './state_features/dashboard_slice';
 
 export const store: Store = configureStore({
   reducer: {
     // STATES
-    editorLeft: editorLeftSlice.reducer,
+    editor: editorSlice.reducer,
     dashboard: dashboardSlice.reducer,
     // API'S
     [apiProjectSlice.reducerPath]: apiProjectSlice.reducer

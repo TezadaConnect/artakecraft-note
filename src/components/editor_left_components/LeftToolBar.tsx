@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const LeftToolBar = () => {
-  const { projectInfo } = useSelector((state: RootState) => state.editorLeft);
+  const { projectInfo } = useSelector((state: RootState) => state.editor);
   const projectDetail = useMemo(
     () => ({
       title: projectInfo?.title,
