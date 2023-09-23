@@ -10,6 +10,7 @@
     "format": "npx prettier . --write"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-table": "^8.10.1",
     "@tippyjs/react": "^4.2.6",

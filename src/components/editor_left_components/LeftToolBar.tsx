@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { RootState } from '@src/redux/store';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const LeftToolBar = () => {
   const { projectInfo } = useSelector((state: RootState) => state.editorLeft);
@@ -21,10 +22,11 @@ const LeftToolBar = () => {
   );
   const [isShow, setIsShow] = useState<boolean>(false);
   const pathname = usePathname();
+  const [animateRef] = useAutoAnimate();
 
   return (
     <div className="px-3 py-3 sticky top-0 bg-slate-950 z-50">
-      <div className="">
+      <div className="" ref={animateRef}>
         {isShow && (
           <div className="relative w-full flex h-40 mb-2">
             <Image

@@ -11,12 +11,14 @@ import Navbar from '@src/components/common/Navbar';
 import { useReadAllAndRecentQuery } from '@src/redux/api_features/api_project_slice';
 import { useDispatch } from 'react-redux';
 import { updateAllAndRecent } from '@src/redux/state_features/dashboard_slice';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const DashboardPage = () => {
   const { data: session } = useSession();
   const dispatch = useDispatch();
   const { data: allRecent } = useReadAllAndRecentQuery(session?.user?.id as string);
   const dataRecent: ProjectType[] | undefined = useMemo(() => allRecent?.recent, [allRecent?.recent]);
+  const [autoAnimate] = useAutoAnimate();
 
   useEffect(() => {
     dispatch(updateAllAndRecent({ ...allRecent }));
@@ -30,7 +32,10 @@ const DashboardPage = () => {
         <div className="relative w-10/12 mt-10 mb-5">
           <h1 className="text-2xl font-semibold text-slate-300">Recents</h1>
           <div className="relative w-full rounded-md px-3 py-2">
-            <div className="relative grid grid-cols-1 gap-3 lg:grid-cols-4 md:grid-cols-2 grid-rows-4 lg:grid-rows-1 md:grid-rows-2 grid-flow-row">
+            <div
+              className="relative grid grid-cols-1 gap-3 lg:grid-cols-4 md:grid-cols-2 grid-rows-4 lg:grid-rows-1 md:grid-rows-2 grid-flow-row"
+              ref={autoAnimate}
+            >
               {dataRecent?.map((item, key) => (
                 <ProjectCard id={item._id} title={item.title} img_url={item.image.url} synopsis={item.synopsis} key={key} />
               ))}

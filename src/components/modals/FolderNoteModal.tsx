@@ -12,6 +12,7 @@ import { isRequiredValidation } from '@src/utils/validation_utils';
 import { ImSpinner9 } from 'react-icons/im';
 import ErrorFieldCommon from '../common/ErrorFieldCommon';
 import { useCreateFolderMutation } from '@src/redux/api_features/api_project_slice';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 type FolderNoteModalProp = {
   // onCreateCallback: () => void;
@@ -25,6 +26,8 @@ const FolderNoteModal = ({}: FolderNoteModalProp) => {
 
   const displaySetterMethod = useCallback((val: DisplayDirNoteEnum) => setDisplay(val), []);
   const displayLoadScreen = useCallback((val: boolean) => setIsBusy(val), []);
+
+  const [animateRef] = useAutoAnimate();
 
   return (
     <ModalCommon params="addFolderNote" isBusy={isBusy}>
@@ -67,7 +70,7 @@ const MainDisplay = ({ displayCallback }: DisplaysProps) => {
   return (
     <div className="flex gap-3 w-full mt-4 mb-3">
       <div
-        className="w-full flex justify-center items-center h-40 text-white hover:scale-[1.01] duration-150 bg-blue-800"
+        className="w-full flex justify-center items-center h-40 text-white hover:scale-[1.03] duration-150 bg-blue-800"
         onClick={() => displayCallback(DisplayDirNoteEnum.note)}
       >
         <div className="flex justify-center flex-col items-center">
@@ -76,7 +79,7 @@ const MainDisplay = ({ displayCallback }: DisplaysProps) => {
         </div>
       </div>
       <div
-        className="w-full flex justify-center items-center h-40 text-white hover:scale-[1.01] duration-200 bg-teal-600"
+        className="w-full flex justify-center items-center h-40 text-white hover:scale-[1.03] duration-200 bg-teal-600"
         onClick={() => displayCallback(DisplayDirNoteEnum.dir)}
       >
         <div className="flex justify-center flex-col items-center">

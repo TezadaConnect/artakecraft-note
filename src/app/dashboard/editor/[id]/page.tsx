@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic';
 import CharacterCard from '@src/components/right-components/CharacterCard';
 import { CARD_LIST, GENERATE_IMAGE } from '@src/utils/static_data_utils';
 import LeftSidebarComponent from '@src/components/editor_left_components/LeftSidebarComponent';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 // import ReactQuill from 'react-quill';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });

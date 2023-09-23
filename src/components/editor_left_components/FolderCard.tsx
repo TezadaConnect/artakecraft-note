@@ -3,6 +3,7 @@ import { ReactNode, useState } from 'react';
 import { AiFillFolder } from 'react-icons/ai';
 import NoteCard from './NoteCard';
 import { FolderType } from '@src/types/folder_type';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 type FolderCardProp = {
   item: FolderType;
@@ -10,8 +11,9 @@ type FolderCardProp = {
 
 const FolderCard = ({ item }: FolderCardProp) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [animateRef] = useAutoAnimate();
   return (
-    <div onClick={() => setIsOpen(!isOpen)} className="bg-slate-950">
+    <div onClick={() => setIsOpen(!isOpen)} className="bg-slate-950" ref={animateRef}>
       <div className="w-full p-2 rounded-tl rounded-tr text-sm border-x border-t border-slate-800 flex gap-2 items-center cursor-pointer select-none group hover:bg-slate-900 duration-200 text-slate-300 ">
         <span className="group-hover:scale-125 group-hover:text-teal-600 duration-200">
           <AiFillFolder size={18} />

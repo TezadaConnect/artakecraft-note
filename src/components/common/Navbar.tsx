@@ -3,11 +3,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { signIn, getProviders, signOut, useSession } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const Navbar = () => {
   const { data: session } = useSession();
   const [providers, setProviders] = useState<any>(null);
   const isRendered = useRef(true);
+  const [animateRef] = useAutoAnimate();
 
   useEffect(() => {
     if (isRendered.current) {
@@ -29,7 +31,7 @@ const Navbar = () => {
 
         {/* DESKTOP NAVIGATION */}
         {session?.user ? (
-          <span className="flex gap-5 items-center">
+          <span className="flex gap-5 items-center" ref={animateRef}>
             <Link className="btn-dark px-5 py-2 text-slate-200" href="/dashboard?isProject=true">
               + Create
             </Link>
@@ -44,7 +46,7 @@ const Navbar = () => {
             </Link>
           </span>
         ) : (
-          <span className="flex gap-5 items-center">
+          <span className="flex gap-5 items-center" ref={animateRef}>
             {providers &&
               Object.values(providers).map((provider: any) => (
                 <button

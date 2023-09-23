@@ -12,6 +12,7 @@ import { DragDropContext, Draggable, DraggableProvided, DropResult, DroppablePro
 import { StrictModeDroppable as Droppable } from '../common/StricModeDroppable';
 import { FolderType } from '@src/types/folder_type';
 import { useReadProjectFoldersNotesQuery } from '@src/redux/api_features/api_project_slice';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const LeftSidebarComponent = () => {
   const { id } = useParams();
@@ -35,6 +36,8 @@ const LeftSidebarComponent = () => {
     // Updating  the state with the new order
     dispath(updateProjectInfo({ ...projectInfo, folders: folderHolder ?? [] }));
   };
+
+  const [animateRef] = useAutoAnimate();
 
   return (
     <Fragment>
