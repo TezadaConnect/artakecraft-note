@@ -5,7 +5,6 @@ let isConnected: boolean = false;
 export const connectToDB = async () => {
   mongoose.set('strictQuery', true);
   if (isConnected) return console.log('MongoDB is already connected');
-
   try {
     const connectionOption = {
       dbName: 'db_artakecraft',

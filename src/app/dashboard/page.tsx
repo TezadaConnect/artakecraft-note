@@ -1,6 +1,6 @@
 'use client';
 import ProjectCard from '@/src/components/ProjectCard';
-import { Fragment, memo, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { ProjectType } from '@src/types/project_type';
 import { useSession } from 'next-auth/react';
 import { useReactTable, getCoreRowModel, flexRender, getPaginationRowModel, getFilteredRowModel, VisibilityState } from '@tanstack/react-table';
@@ -8,37 +8,34 @@ import { ALL_PROJECT_COL } from '@src/utils/data_table_column_definitions_utils'
 import { useRouter } from 'next/navigation';
 import ProjectModal from '@src/components/modals/ProjectModal';
 import Navbar from '@src/components/common/Navbar';
+import { useReadAllAndRecentQuery } from '@src/redux/api_features/api_project_slice';
+import { useDispatch } from 'react-redux';
+import { updateAllAndRecent } from '@src/redux/state_features/dashboard_slice';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const DashboardPage = () => {
-  const [project, setProjects] = useState<any>();
   const { data: session } = useSession();
-
-  const dataRecent: ProjectType[] = useMemo(() => project?.recent, [project?.recent]);
-
-  const getRecentAndAllProjects = useCallback(async (item_id: string) => {
-    const url: string = '/api/project/author/' + item_id;
-    const response: Response = await fetch(url, { method: 'GET' });
-    const data: any = await response.json();
-    if (response.ok) {
-      setProjects({ ...data });
-      return;
-    }
-    console.log('Error: ' + response.status);
-  }, []);
+  const dispatch = useDispatch();
+  const { data: allRecent } = useReadAllAndRecentQuery(session?.user?.id as string);
+  const dataRecent: ProjectType[] | undefined = useMemo(() => allRecent?.recent, [allRecent?.recent]);
+  const [autoAnimate] = useAutoAnimate();
 
   useEffect(() => {
-    if (session?.user?.id) getRecentAndAllProjects(session.user.id);
-  }, [getRecentAndAllProjects, session?.user?.id]);
+    dispatch(updateAllAndRecent({ ...allRecent }));
+  }, [dispatch, allRecent]);
 
   return (
     <Fragment>
-      <ProjectModal onSuccessCallback={() => getRecentAndAllProjects(session?.user?.id as string)} />
+      <ProjectModal />
       <Navbar />
       <section className="relative flex flex-col items-center z-0 h-full">
         <div className="relative w-10/12 mt-10 mb-5">
           <h1 className="text-2xl font-semibold text-slate-300">Recents</h1>
           <div className="relative w-full rounded-md px-3 py-2">
-            <div className="relative grid grid-cols-1 gap-3 lg:grid-cols-4 md:grid-cols-2 grid-rows-4 lg:grid-rows-1 md:grid-rows-2 grid-flow-row">
+            <div
+              className="relative grid grid-cols-1 gap-3 lg:grid-cols-4 md:grid-cols-2 grid-rows-4 lg:grid-rows-1 md:grid-rows-2 grid-flow-row"
+              ref={autoAnimate}
+            >
               {dataRecent?.map((item, key) => (
                 <ProjectCard id={item._id} title={item.title} img_url={item.image.url} synopsis={item.synopsis} key={key} />
               ))}
@@ -47,7 +44,7 @@ const DashboardPage = () => {
         </div>
         {/* ----TABLE SECTION---- */}
         <div className="relative text-left w-10/12 text-slate-300">
-          <TableComponentSection project={project?.all as ProjectType[]} />
+          <TableComponentSection project={allRecent?.all as ProjectType[]} />
           <div className="my-4 text-left text-slate-500 text-xs">&copy; 2023 Artakecraft Note</div>
         </div>
       </section>

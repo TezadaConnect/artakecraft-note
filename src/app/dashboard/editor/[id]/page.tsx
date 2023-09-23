@@ -1,18 +1,15 @@
 'use client';
 import { BsPencilFill } from 'react-icons/bs';
 import { AiFillSetting } from 'react-icons/ai';
-import { Fragment, memo, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import 'react-quill/dist/quill.bubble.css';
 import RightToolBar from '@src/components/right-components/RightToolBar';
 import dynamic from 'next/dynamic';
 import CharacterCard from '@src/components/right-components/CharacterCard';
 import { CARD_LIST, GENERATE_IMAGE } from '@src/utils/static_data_utils';
-import LeftToolBar from '@src/components/left-components/LeftToolBar';
-import FolderCard from '@src/components/left-components/FolderCard';
-import NoteCard from '@src/components/left-components/NoteCard';
-import FolderNoteModal from '@src/components/modals/FolderNoteModal';
-import { ProjectType } from '@src/types/project_type';
-import { useParams } from 'next/navigation';
+import LeftSidebarComponent from '@src/components/editor_left_components/LeftSidebarComponent';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+// import ReactQuill from 'react-quill';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -23,7 +20,7 @@ const Editor = () => {
     <Fragment>
       <section className="h-screen bg-slate-950 overflow-hidden text-gray-300 top-0">
         <div className="grid grid-cols-12 grid-rows-1">
-          <LeftPageComponent />
+          <LeftSidebarComponent />
           {/* HEADER SECTION */}
           <div className="col-span-12 md:col-span-7 px-3 py-2 border-r-2 border-slate-900">
             <div className="flex justify-between items-center py-3  mx-3">
@@ -95,48 +92,5 @@ const RightPageComponent = () => {
         )}
       </div>
     </div>
-  );
-};
-
-const LeftPageComponent = () => {
-  const [currentProj, setCurrentProj] = useState<ProjectType>();
-  const { id } = useParams();
-  useEffect(() => {
-    const fetchCurrentProject = async (item_id: string) => {
-      const url: string = '/api/project/' + item_id;
-      const res: Response = await fetch(url, { method: 'GET' });
-      const data: ProjectType = await res.json();
-      if (res.ok) {
-        setCurrentProj({ ...data });
-        return;
-      }
-      console.log('Error: ' + res.status);
-    };
-    fetchCurrentProject(id as string);
-  }, [id]);
-
-  return (
-    <Fragment>
-      <FolderNoteModal />
-      <div className="hidden col-span-2 border-r-2 md:block overflow-y-auto border-slate-900">
-        <LeftToolBar currentProj={currentProj as ProjectType} />
-        <div className="px-3">
-          <FolderCard title="Chapters">
-            <NoteCard title="Chapter 1" id="1" />
-            <NoteCard title="Chapter 2" />
-            <NoteCard title="Chapter 3" />
-          </FolderCard>
-          <FolderCard title="Research">
-            <NoteCard title="Tikbalang 1" />
-            <NoteCard title="Sarangay" />
-          </FolderCard>
-          <FolderCard title="Brain Vomit">
-            <NoteCard title="Geo Locations" />
-            <NoteCard title="Qoutes" />
-            <NoteCard title="hilarious Joke" />
-          </FolderCard>
-        </div>
-      </div>
-    </Fragment>
   );
 };

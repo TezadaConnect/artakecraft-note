@@ -6,13 +6,17 @@ const FolderSchema = new Schema(
       type: String,
       required: [true, 'Name is required!']
     },
-    notes: [{ type: Schema.Types.ObjectId, ref: 'Note' }]
+    notes: [{ type: Schema.Types.ObjectId, ref: 'Note' }],
+    slot: {
+      type: Number,
+      required: [true, 'Name is required!']
+    }
   },
   {
     timestamps: true
   }
 );
 
-const Folder = models.User || model('Folder', FolderSchema);
+const Folder = models.Folder || model('Folder', FolderSchema);
 
 export default Folder;

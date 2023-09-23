@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 /**
  * ======================================
- *  DONE GET ONE PROJECT
+ *  DONE GET ALL AND RECENT PROJECTS
  * ======================================
  */
 
