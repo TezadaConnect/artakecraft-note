@@ -50,7 +50,8 @@ export const apiProjectSlice = createApi({
         url: `project/note/${items.id}`,
         method: 'PATCH',
         body: items.inputs
-      })
+      }),
+      invalidatesTags: ['project']
     }),
     /**
      * =================================================

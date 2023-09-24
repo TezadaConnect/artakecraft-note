@@ -1,26 +1,16 @@
 'use client';
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import 'react-quill/dist/quill.bubble.css';
 import RightToolBar from '@src/components/editor/editor_right_components/RightToolBar';
 import CharacterCard from '@src/components/editor/editor_right_components/CharacterCard';
 import { CARD_LIST, GENERATE_IMAGE } from '@src/utils/static_data_utils';
 import LeftSidebarComponent from '@src/components/editor/editor_left_components/LeftSidebarComponent';
 import { useSearchParams } from 'next/navigation';
-import { useSelector } from 'react-redux';
-import { RootState } from '@src/redux/store';
-import { getNoteDataByProject, getNoteDataById } from '@src/utils/editor_utils';
-import { useRouter } from 'next/navigation';
 import { useReadNoteQuery } from '@src/redux/api_features/api_project_slice';
 import { NoteType } from '@src/types/note_type';
 import WritersNoteComponent from '@src/components/editor/editor_mid_components/WritersNoteComponent';
 import LoaderComponent from '@src/components/common/LoaderComponent';
-// import ReactQuill from 'react-quill';
-
-const initNoteValue = {
-  _id: '',
-  title: '',
-  text: ''
-};
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const Editor = () => {
   const noteId = useSearchParams().get('noteId');
@@ -29,6 +19,8 @@ const Editor = () => {
   const { data, isLoading, refetch } = useReadNoteQuery(noteId as string);
 
   const setterHandlerCallback = useCallback((val: NoteType) => setNote({ ...val }), []);
+
+  const [animateRef] = useAutoAnimate();
 
   const loader: boolean = useMemo(() => {
     const item: boolean = isLoading || busy;
@@ -63,7 +55,7 @@ const Editor = () => {
       <section className="h-screen bg-slate-950 overflow-hidden text-gray-300 top-0">
         <div className="grid grid-cols-12 grid-rows-1">
           <LeftSidebarComponent />
-          <div className="col-span-12 md:col-span-7 px-3 py-2 border-r-2 border-slate-900">
+          <div className="col-span-12 md:col-span-7 px-3 py-2 border-r-2 border-slate-900" ref={animateRef}>
             {noteId ? (
               loader ? (
                 <LoaderComponent />

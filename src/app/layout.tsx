@@ -1,10 +1,8 @@
-import Navbar from '@src/components/common/Navbar';
 import NextAuthProvider from '@src/components/NextAuthProvider';
 import '@/src/css/globals.css';
 import { Metadata } from 'next';
 // import { Inter } from 'next/font/google';
-import { ReactNode, Suspense } from 'react';
-import LoadingComponent from './_loading';
+import { ReactNode } from 'react';
 import ReduxProvider from '@src/components/ReduxProvider';
 
 // const inter = Inter({ subsets: ['latin'] });

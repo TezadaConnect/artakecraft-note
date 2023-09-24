@@ -1,9 +1,7 @@
 'use client';
 import Navbar from '@src/components/common/Navbar';
-import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { Fragment } from 'react';
-import { options } from './api/auth/[...nextauth]/options';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
