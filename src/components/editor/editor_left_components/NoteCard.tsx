@@ -14,7 +14,7 @@ const NoteCard = ({ title = 'Towns of Beginnings', id }: NoteCardProps) => {
   return (
     <Link
       href={pathname + '?noteId=' + id}
-      className={`w-full p-2 border-b border-slate-900 rounded cursor-pointer select-none group ${
+      className={`w-full p-2 border-b border-slate-900 rounded-b cursor-pointer select-none group ${
         stateSelection ? 'bg-slate-900' : 'hover:bg-slate-900'
       }`}
     >

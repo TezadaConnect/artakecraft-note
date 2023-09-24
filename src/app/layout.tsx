@@ -4,7 +4,7 @@ import '@/src/css/globals.css';
 import { Metadata } from 'next';
 // import { Inter } from 'next/font/google';
 import { ReactNode, Suspense } from 'react';
-import LoadingComponent from './loading';
+import LoadingComponent from './_loading';
 import ReduxProvider from '@src/components/ReduxProvider';
 
 // const inter = Inter({ subsets: ['latin'] });
@@ -23,9 +23,7 @@ export default function RootLayout({ children }: LayoutProps) {
     <html lang="en">
       <body className="bg-slate-950 relative">
         <NextAuthProvider>
-          <ReduxProvider>
-            <Suspense fallback={<LoadingComponent />}>{children} </Suspense>
-          </ReduxProvider>
+          <ReduxProvider>{children}</ReduxProvider>
         </NextAuthProvider>
       </body>
     </html>

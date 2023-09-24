@@ -17,7 +17,8 @@ const RELATED_DATA = {
   populate: {
     path: 'notes',
     model: Note
-  }
+  },
+  options: { sort: { slot: 1 } }
 };
 
 export const GET = async (req: NextRequest, { params }: any) => {

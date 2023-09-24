@@ -1,57 +1,79 @@
 'use client';
-import { BsPencilFill } from 'react-icons/bs';
-import { AiFillSetting } from 'react-icons/ai';
-import { Fragment, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import 'react-quill/dist/quill.bubble.css';
-import RightToolBar from '@src/components/right-components/RightToolBar';
-import dynamic from 'next/dynamic';
-import CharacterCard from '@src/components/right-components/CharacterCard';
+import RightToolBar from '@src/components/editor/editor_right_components/RightToolBar';
+import CharacterCard from '@src/components/editor/editor_right_components/CharacterCard';
 import { CARD_LIST, GENERATE_IMAGE } from '@src/utils/static_data_utils';
-import LeftSidebarComponent from '@src/components/editor_left_components/LeftSidebarComponent';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
+import LeftSidebarComponent from '@src/components/editor/editor_left_components/LeftSidebarComponent';
+import { useSearchParams } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@src/redux/store';
+import { getNoteDataByProject, getNoteDataById } from '@src/utils/editor_utils';
+import { useRouter } from 'next/navigation';
+import { useReadNoteQuery } from '@src/redux/api_features/api_project_slice';
+import { NoteType } from '@src/types/note_type';
+import WritersNoteComponent from '@src/components/editor/editor_mid_components/WritersNoteComponent';
+import LoaderComponent from '@src/components/common/LoaderComponent';
 // import ReactQuill from 'react-quill';
 
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const initNoteValue = {
+  _id: '',
+  title: '',
+  text: ''
+};
 
 const Editor = () => {
-  const [text, setText] = useState<string>();
+  const noteId = useSearchParams().get('noteId');
+  const [note, setNote] = useState<NoteType>();
+  const [busy, setBusy] = useState<boolean>(false);
+  const { data, isLoading, refetch } = useReadNoteQuery(noteId as string);
+
+  const setterHandlerCallback = useCallback((val: NoteType) => setNote({ ...val }), []);
+
+  const loader: boolean = useMemo(() => {
+    const item: boolean = isLoading || busy;
+    return item;
+  }, [isLoading, busy]);
+
+  const fetchData = useCallback(async () => {
+    setBusy(true);
+    if (noteId !== null && data) {
+      try {
+        await refetch().unwrap();
+        const itemHolder = data as NoteType;
+        setNote({ ...itemHolder });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [noteId, data, refetch]);
+
+  useEffect(() => {
+    fetchData();
+    const timeoutModule = setTimeout(() => {
+      setBusy(false);
+    }, 1000);
+    return () => {
+      clearTimeout(timeoutModule);
+    };
+  }, [fetchData]);
 
   return (
     <Fragment>
       <section className="h-screen bg-slate-950 overflow-hidden text-gray-300 top-0">
         <div className="grid grid-cols-12 grid-rows-1">
           <LeftSidebarComponent />
-          {/* HEADER SECTION */}
           <div className="col-span-12 md:col-span-7 px-3 py-2 border-r-2 border-slate-900">
-            <div className="flex justify-between items-center py-3  mx-3">
-              <div className="flex gap-1 justify-center items-center">
-                <h1 className="text-2xl font-semibold">Chapter 1</h1>
-                <span className="text-gray-500 hover:text-teal-600 duration-200 hover:-rotate-12 p-2">
-                  <BsPencilFill size={15} />
-                </span>
-              </div>
-
-              <div className="flex gap-3 justify-center items-center group hover:text-teal-600 duration-200 text-gray-500">
-                <span className="hover:animate-spin">
-                  <AiFillSetting size={22} />
-                </span>
-              </div>
-            </div>
-            <div>
-              <ReactQuill
-                theme="bubble"
-                value={text}
-                onChange={(value: any) => {
-                  setText(value);
-                }}
-                className="text-lg"
-                placeholder="Write here..."
-              />
-            </div>
-
-            <div className="my-4 text-left text-slate-500 text-xs mx-3">&copy; 2023 Artakecraft Note</div>
+            {noteId ? (
+              loader ? (
+                <LoaderComponent />
+              ) : (
+                <WritersNoteComponent note={note as NoteType} setText={setterHandlerCallback} />
+              )
+            ) : (
+              <div>Hello World</div>
+            )}
           </div>
-
           <RightPageComponent />
         </div>
       </section>

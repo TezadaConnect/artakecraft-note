@@ -1,13 +1,14 @@
 'use client';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_API_URL_CONFIG, HEADER_FORM_CONFIG } from '@src/configs/url_configs';
+import { BASE_API_URL_CONFIG } from '@src/configs/url_configs';
+import { NoteType } from '@src/types/note_type';
 import { AllAndRecentProjectsType } from '@src/types/others';
 import { ProjectType } from '@src/types/project_type';
 
 export const apiProjectSlice = createApi({
   reducerPath: 'apiProjectSlice',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_API_URL_CONFIG }),
-  tagTypes: ['project', 'recentAndAll'],
+  tagTypes: ['project', 'recentAndAll', 'editorNote'],
   endpoints: (builder) => ({
     /**
      * =================================================
@@ -34,6 +35,23 @@ export const apiProjectSlice = createApi({
       }),
       invalidatesTags: ['project']
     }),
+
+    /**
+     * =================================================
+     * Note Text Handler
+     * =================================================
+     */
+    readNote: builder.query<NoteType, string>({
+      query: (id) => 'project/note/' + id,
+      providesTags: ['editorNote']
+    }),
+    updateNote: builder.mutation<void, { id: string; inputs: any }>({
+      query: (items) => ({
+        url: `project/note/${items.id}`,
+        method: 'PATCH',
+        body: items.inputs
+      })
+    }),
     /**
      * =================================================
      * Recent and All
@@ -59,5 +77,7 @@ export const {
   useCreateFolderMutation,
   useReadAllAndRecentQuery,
   useCreateProjectMutation,
-  useCreateNotesMutation
+  useCreateNotesMutation,
+  useUpdateNoteMutation,
+  useReadNoteQuery
 } = apiProjectSlice;
