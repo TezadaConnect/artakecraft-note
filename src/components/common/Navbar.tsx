@@ -23,7 +23,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="py-2 flex justify-center sticky top-0 z-10 bg-slate-950 text-slate-300">
+    <nav className="py-2 flex justify-center top-0 z-10 sticky bg-slate-950 text-slate-300 w-full">
       <div className="w-10/12 flex justify-between items-center">
         <Link href={session?.user ? '/dashboard' : '/'} className="font-semibold text-lg">
           Artakecraft Note

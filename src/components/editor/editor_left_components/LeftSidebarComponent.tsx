@@ -1,15 +1,15 @@
 'use client';
 import { Fragment, memo, useEffect, useMemo } from 'react';
-import FolderNoteModal from '../modals/FolderNoteModal';
+import FolderNoteModal from '@src/components/modals/FolderNoteModal';
 import LeftToolBar from './LeftToolBar';
-import FolderCard from './FolderCard';
+import FolderCard from '../../cards/FolderCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '@src/redux/store';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'next/navigation';
 import { updateProjectInfo } from '@src/redux/state_features/editor_slice';
 import { DragDropContext, Draggable, DraggableProvided, DropResult, DroppableProvided } from 'react-beautiful-dnd';
-import { StrictModeDroppable as Droppable } from '../common/StricModeDroppable';
+import { StrictModeDroppable as Droppable } from '@src/components/common/StricModeDroppable';
 import { FolderType } from '@src/types/folder_type';
 import { useReadProjectFoldersNotesQuery } from '@src/redux/api_features/api_project_slice';
 

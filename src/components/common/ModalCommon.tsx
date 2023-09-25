@@ -26,7 +26,7 @@ const ModalCommon = ({ children, params, isBusy }: ModalCommonProps) => {
         {isOpen && (
           <div
             ref={animateRef}
-            className="fixed top-0 left-0 bg-gray-600/60 z-[10000] h-screen w-full flex justify-center items-center"
+            className="fixed top-0 left-0 bg-gray-600/60 z-[60] h-screen w-full flex justify-center items-center"
             onClick={() => {
               if (typeof isBusy === 'boolean') {
                 if (isBusy === true) return;

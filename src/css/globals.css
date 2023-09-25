@@ -37,7 +37,7 @@
 }
 
 .btn-blue {
-  @apply transition duration-300 ease-in-out bg-teal-600 text-white rounded-full text-sm hover:bg-teal-700;
+  @apply transition duration-300 ease-in-out bg-teal-600 text-white rounded-full hover:bg-teal-700;
 }
 
 .head_text {
@@ -58,10 +58,9 @@
 }
 
 /* QUILL MODIFICATION */
-.ql-editor {
-  max-height: 85vh;
+/* .ql-editor {
   overflow: auto;
-}
+} */
 
 .quill > .ql-container > .ql-editor.ql-blank::before {
   font-size: 18px;

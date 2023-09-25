@@ -113,7 +113,7 @@ const CreateNoteDisplay = ({ displayCallback, loadCallback }: DisplaysProps) => 
     enableReinitialize: true,
     initialValues: {
       title: '',
-      folderId: options[0].value
+      folderId: options[0]?.value ?? ''
     },
     validationSchema: Yup.object({
       folderId: isRequiredValidation,
@@ -146,8 +146,8 @@ const CreateNoteDisplay = ({ displayCallback, loadCallback }: DisplaysProps) => 
             onChange={form.handleChange}
             className="w-full p-3 text-lg text-slate-300 border border-slate-800 rounded-lg bg-slate-900 focus:ring-slate-600 focus:border-slate-600"
           >
-            {options.map((item, key) => (
-              <option value={item.value} key={item.value} selected={key === 0}>
+            {options.map((item) => (
+              <option value={item.value} key={item.value}>
                 {item.label}
               </option>
             ))}

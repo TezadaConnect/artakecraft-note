@@ -6,7 +6,7 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
-        pathname: '/artakecraft-note/**'
+        pathname: '/**'
       }
     ],
     domains: ['source.unsplash.com', 'lh3.googleusercontent.com', 'res.cloudinary.com']
