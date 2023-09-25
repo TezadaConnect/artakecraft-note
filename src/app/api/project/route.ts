@@ -1,7 +1,7 @@
 import { connectToDB } from '@src/configs/database_config';
 import Project from '@src/models/project';
 import { CloudinaryImageType } from '@src/types/project_type';
-import { uploader, fileToBase64Handler } from '@src/utils/cloudinary_utils';
+import { uploader, fileToBase64Handler } from '@src/service/cloudinary_service';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
