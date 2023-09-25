@@ -58,9 +58,11 @@ const LeftToolBar = () => {
           <span className="hover:scale-125 duration-200 hover:text-teal-600">
             <FaScrewdriverWrench size={20} />
           </span>
-          <span className="hover:scale-125 duration-200 hover:text-teal-600" onClick={() => setIsShow(!isShow)}>
-            {isShow ? <FiMoreVertical size={25} /> : <FiMoreHorizontal size={25} />}
-          </span>
+          {noteId && (
+            <span className="hover:scale-125 duration-200 hover:text-teal-600" onClick={() => setIsShow(!isShow)}>
+              {isShow ? <FiMoreVertical size={25} /> : <FiMoreHorizontal size={25} />}
+            </span>
+          )}
         </div>
       </div>
     </div>

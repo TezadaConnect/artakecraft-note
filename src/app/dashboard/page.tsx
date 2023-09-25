@@ -1,5 +1,4 @@
 'use client';
-import ProjectCard from '@/src/components/ProjectCard';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { ProjectType } from '@src/types/project_type';
 import { useSession } from 'next-auth/react';
@@ -12,6 +11,7 @@ import { useReadAllAndRecentQuery } from '@src/redux/api_features/api_project_sl
 import { useDispatch } from 'react-redux';
 import { updateAllAndRecent } from '@src/redux/state_features/dashboard_slice';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import ProjectCard from '@src/components/cards/ProjectCard';
 
 const DashboardPage = () => {
   const { data: session } = useSession();

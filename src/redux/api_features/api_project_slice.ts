@@ -1,6 +1,6 @@
 'use client';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_API_URL_CONFIG } from '@src/configs/url_configs';
+import { BASE_API_URL_CONFIG } from '@src/configs/urls_config';
 import { NoteType } from '@src/types/note_type';
 import { AllAndRecentProjectsType } from '@src/types/others';
 import { ProjectType } from '@src/types/project_type';

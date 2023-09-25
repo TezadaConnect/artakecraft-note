@@ -10,8 +10,8 @@ import { RiLoader3Line } from 'react-icons/ri';
 import { UnprivilegedEditor } from 'react-quill';
 import { DeltaStatic, Sources } from 'quill';
 import wordsCount from 'words-count';
-import { htmlToStr } from '@src/utils/methods_utils';
 import { IoIosSave } from 'react-icons/io';
+import { htmlStingToStr } from '@src/service/convert_service';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 type WritersNoteComponentProp = {
@@ -28,9 +28,15 @@ const WritersNoteComponent = ({ note, setText }: WritersNoteComponentProp) => {
   const timerRef = useRef<any>(null);
   const [update] = useUpdateNoteMutation();
   const noteId = useSearchParams().get('noteId') as string;
-  const [counter, setCounter] = useState(wordsCount(htmlToStr(note?.text as string)) ?? 0);
+  const initCount = wordsCount(htmlStingToStr(note?.text as string));
+  const [counter, setCounter] = useState(initCount ?? 0);
   const [pending, setTransitions] = useTransition();
 
+  /**
+   * =============================================
+   * FOR HANDLING TEXT
+   * =============================================
+   */
   const handleEditorChange = (val: string, _: DeltaStatic, __: Sources, editor: UnprivilegedEditor) => {
     setIsPending({ ...isPending, text: true });
     clearTimeout(timerRef.current);
@@ -48,7 +54,13 @@ const WritersNoteComponent = ({ note, setText }: WritersNoteComponentProp) => {
     }, 2000);
   };
 
+  /**
+   * =============================================
+   * FOR HANDLING TITLE
+   * =============================================
+   */
   const [isEdit, setIsEdit] = useState(false);
+
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setText({ ...note, title: event.target.value });
   };
@@ -66,7 +78,7 @@ const WritersNoteComponent = ({ note, setText }: WritersNoteComponentProp) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center py-3  mx-3">
+      <div className="flex justify-between items-center py-3  px-6 sticky top-0 bg-slate-950/90 z-10">
         {isEdit ? (
           <div className="flex gap-3 justify-center items-center">
             <input
@@ -114,10 +126,10 @@ const WritersNoteComponent = ({ note, setText }: WritersNoteComponentProp) => {
           )}
         </div>
       </div>
-      <div>
+      <div className="mx-3">
         <ReactQuill theme="bubble" value={note?.text} onChange={handleEditorChange} className="text-lg" placeholder="Write here..." />
       </div>
-      <div className="my-4 text-left text-slate-500 text-xs mx-3 flex justify-between">
+      <div className="my-4 text-left text-slate-500 text-xs mx-6 flex justify-between">
         <div>&copy; 2023 Artakecraft Note</div>
         <div>{pending ? <span>counting...</span> : <span>Word count: {counter}</span>}</div>
       </div>

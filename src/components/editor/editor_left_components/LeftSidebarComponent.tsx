@@ -2,7 +2,7 @@
 import { Fragment, memo, useEffect, useMemo } from 'react';
 import FolderNoteModal from '@src/components/modals/FolderNoteModal';
 import LeftToolBar from './LeftToolBar';
-import FolderCard from './FolderCard';
+import FolderCard from '../../cards/FolderCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '@src/redux/store';
 import { useDispatch } from 'react-redux';

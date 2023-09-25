@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LoaderComponent = () => {
+const LoaderCommon = () => {
   return (
     <div className="flex justify-center my-24">
       <svg
@@ -23,4 +23,4 @@ const LoaderComponent = () => {
   );
 };
 
-export default LoaderComponent;
+export default LoaderCommon;

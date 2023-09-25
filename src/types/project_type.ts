@@ -9,6 +9,7 @@ export type ProjectType = {
   image: CloudinaryImageType;
   folders?: FolderType[] | string[];
   updatedAt: Date;
+  createdAt: Date;
 };
 
 export type CloudinaryImageType = {
