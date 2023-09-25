@@ -17,7 +17,8 @@ const RELATED_DATA = {
   populate: {
     path: 'notes',
     model: Note
-  }
+  },
+  options: { sort: { slot: 1 } }
 };
 
 export const GET = async (req: NextRequest, { params }: any) => {
@@ -33,7 +34,8 @@ export const GET = async (req: NextRequest, { params }: any) => {
       image: project.image,
       synopsis: project.synopsis,
       genre: project.genre,
-      folders: project.folders
+      folders: project.folders,
+      createdAt: project.createdAt
     });
   } catch (error) {
     return NextResponse.json({ error: 'Error try again later' }, { status: 500 });

@@ -5,7 +5,6 @@ import NoteCard from './NoteCard';
 import { FolderType } from '@src/types/folder_type';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { NoteType } from '@src/types/note_type';
-import { useParams } from 'next/navigation';
 
 type FolderCardProp = {
   item: FolderType;

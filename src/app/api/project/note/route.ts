@@ -14,7 +14,6 @@ export const POST = async (req: NextRequest) => {
     await connectToDB();
     const folder = await Folder.findByIdAndUpdate(folderId);
     const newNote = await new Note({ title: title, text: '' });
-    console.table(newNote);
     await newNote.save();
     await folder.notes.push(newNote._id);
     await folder.save();
