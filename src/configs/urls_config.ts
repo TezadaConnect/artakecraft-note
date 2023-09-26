@@ -1,1 +1,1 @@
-export const BASE_API_URL_CONFIG = 'http://localhost:3000/api';
+export const BASE_API_URL_CONFIG = 'https://artakecraft-note.vercel.app/api';
